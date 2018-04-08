@@ -8,7 +8,7 @@ Create, delete and list all users on client side without back-end server
 
 ```javascript
 exports.createUser = functions.firestore
-    .document('User/{userId}')
+    .document('User/{user}')
     .onCreate((snap) => {
         //you can add any other property present in
         //https://firebase.google.com/docs/reference/js/firebase.User#properties
@@ -45,7 +45,7 @@ exports.createUser = functions.firestore
 * #### Delete user
 ```javascript
 exports.deleteUser = functions.firestore
-    .document('User/{userId}')
+    .document('User/{user}')
     .onDelete((snap) => {
         //get delete document data
         let dbvalues = snap.data();

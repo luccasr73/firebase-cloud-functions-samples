@@ -10,7 +10,7 @@ const cors = require('cors')({
 //for create / delete account using admin sdk on web client
 //create by firestore trigger
 exports.createUser = functions.firestore
-    .document('User/{userId}')
+    .document('User/{user}')
     .onCreate((snap) => {
         //you can add any other property present in https://firebase.google.com/docs/reference/js/firebase.User#properties
         let dbvalues = snap.data();
@@ -44,7 +44,7 @@ exports.createUser = functions.firestore
     });
 //delete user by firestore trigger
 exports.deleteUser = functions.firestore
-    .document('User/{userId}')
+    .document('User/{user}')
     .onDelete((snap) => {
         //get delete document data
         let dbvalues = snap.data();
