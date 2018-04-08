@@ -4,7 +4,7 @@ Create, delete and list all users
 
 ### Using firestore trigger
 
-* ##### Create user
+* #### Create user
 
 ```javascript
 exports.createUser = functions.firestore
@@ -42,7 +42,7 @@ exports.createUser = functions.firestore
             });
     });
 ```
-* ##### Delete user
+* #### Delete user
 ```javascript
 exports.deleteUser = functions.firestore
     .document('User/{userId}')
@@ -66,7 +66,7 @@ exports.deleteUser = functions.firestore
 ```
 ### Using https request
 
-* ##### Create user
+* #### Create user
 ```javascript
 exports.createUser = functions.https.onRequest((req, res) => {
     cors(req, res, () => {
@@ -111,7 +111,7 @@ exports.createUser = functions.https.onRequest((req, res) => {
     });
 });
 ```
-* ##### Delete user
+* #### Delete user
 ```javascript
 exports.deleteUser = functions.https.onRequest((req, res) => {
     cors(req, res, () => {
@@ -156,7 +156,7 @@ exports.deleteUser = functions.https.onRequest((req, res) => {
     });
 });
 ```
-* ##### List all users
+* #### List all users
 ```javascript
 exports.listUsers = functions.https.onRequest((req, res) => {
     cors(req, res, () => {
