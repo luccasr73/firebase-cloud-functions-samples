@@ -5,7 +5,7 @@ admin.initializeApp();
 const cors = require('cors')({
     origin: '' //set your especific domain for cors or true for allow any domain
 });
-/*
+
 //if you prefer to use a firestore trigger
 //for create / delete account using admin sdk on web client
 //create by firestore trigger
@@ -24,7 +24,9 @@ exports.createUser = functions.firestore
                 displayName: name
             })
             .then(userRecord => {
-                //Get the uid of the user newly created and adds to the document referring to the user, this step is very important so that the trigger used to delete the user works
+                //Get the uid of the user newly created and adds to the document
+                //referring to the user, this step is very important so that the
+                //trigger used to delete the user works
                 snap.data.ref.set({
                     uid: userRecord.uid
                 }, {
@@ -60,26 +62,31 @@ exports.deleteUser = functions.firestore
                     });
             });
     });
-*/
+
 //http functions
 //create user
 exports.createUser = functions.https.onRequest((req, res) => {
     cors(req, res, () => {
         //get user token to verify that the user is actually logged in
         const userToken = req.get('userToken');
-        //verify the token and returns DecodedIdToken as decoded, containing the list properties here https://firebase.google.com/docs/reference/admin/node/admin.auth.DecodedIdToken
+        //verify the token and returns DecodedIdToken as decoded, containing the
+        //list properties here
+        //https://firebase.google.com/docs/reference/admin/node/admin.auth.DecodedIdToken
         return admin.auth().verifyIdToken(userToken)
             .then((decoded) => {
-                //create user using data received by a post request, you can see more on http://expressjs.com/en/4x/api.html#req.body
+                //create user using data received by a post request, you can see
+                //more on http://expressjs.com/en/4x/api.html#req.body
                 admin.auth().createUser({
-                        //you can add any other property present in https://firebase.google.com/docs/reference/js/firebase.User#properties
+                        //you can add any other property present in
+                        //https://firebase.google.com/docs/reference/js/firebase.User#properties
                         email: req.body.email,
                         password: req.body.pass,
                         displayName: req.body.name,
                     })
                     .then((userRecord) => {
                         console.log("Successfully created new user:", userRecord.uid);
-                        //send a message to client web if the user is successfully created
+                        //send a message to client web if the user is
+                        //successfully created
                         res.status(200).send({
                             code: 1,
                             message: 'Successfully created new user',
@@ -88,15 +95,16 @@ exports.createUser = functions.https.onRequest((req, res) => {
                     })
                     .catch((error) => {
                         console.log("Error creating new user:", error);
-                        //send a message to client web if occurred an error on user creation
+                        //send a message to client web if occurred an error on
+                        //user creation
                         res.status(400).send({
                             code: 2,
                             message: 'Erro ao criar usuario',
                             error: error
                         });
                     });
-            })
-            .catch((err) => res.status(401).send(err)); //send a message to client web if the user token is invalid
+            }) //send a message to client web if the user token is invalid
+            .catch((err) => res.status(401).send(err));
     });
 });
 //delete user
@@ -104,18 +112,23 @@ exports.deleteUser = functions.https.onRequest((req, res) => {
     cors(req, res, () => {
         //get user token to verify that the user is actually logged in
         const userToken = req.get('userToken');
-        //verify the token and returns DecodedIdToken as decoded, containing the list properties here https://firebase.google.com/docs/reference/admin/node/admin.auth.DecodedIdToken
+        //verify the token and returns DecodedIdToken as decoded, containing the
+        //list properties here
+        //https://firebase.google.com/docs/reference/admin/node/admin.auth.DecodedIdToken
         return admin.auth().verifyIdToken(userToken)
             .then((decoded) => {
                 let uid = req.body.uid;
                 //revoke login token for desconect a conected user
                 admin.auth().revokeRefreshTokens(uid)
                     .then(() => {
-                        //delete user using uid received by a post request and attributed to "let uid = req.body.uid", you can see more on http://expressjs.com/en/4x/api.html#req.body
+                        //delete user using uid received by a post request and
+                        //attributed to "let uid = req.body.uid", you can see
+                        //more on http://expressjs.com/en/4x/api.html#req.body
                         admin.auth().deleteUser(uid)
                             .then(() => {
                                 console.log("Deleted user successfully");
-                                //send a message to client web if the user is successfully deleted
+                                //send a message to client web if the user is
+                                //successfully deleted
                                 res.status(200).send({
                                     code: 1,
                                     message: 'Deleted user successfully'
@@ -123,7 +136,8 @@ exports.deleteUser = functions.https.onRequest((req, res) => {
                             })
                             .catch((error) => {
                                 console.log("There was an error deleting the user", error);
-                                //send a message to client web if occurred an error on user delete
+                                //send a message to client web if occurred an
+                                //error on user delete
                                 res.status(400).send({
                                     code: 2,
                                     message: 'There was an error deleting the user',
@@ -132,8 +146,8 @@ exports.deleteUser = functions.https.onRequest((req, res) => {
                             });
                     });
 
-            })
-            .catch((err) => res.status(401).send(err)); //send a message to client web if the user token is invalid
+            }) //send a message to client web if the user token is invalid
+            .catch((err) => res.status(401).send(err));
     });
 });
 //list all user
@@ -141,15 +155,23 @@ exports.listUsers = functions.https.onRequest((req, res) => {
     cors(req, res, () => {
         //get user token to verify that the user is actually logged in
         const userToken = req.get('userToken');
-        //verify the token and returns DecodedIdToken as decoded, containing the list properties here https://firebase.google.com/docs/reference/admin/node/admin.auth.DecodedIdToken
+        //verify the token and returns DecodedIdToken as decoded, containing the
+        //list properties here 
+        //https://firebase.google.com/docs/reference/admin/node/admin.auth.DecodedIdToken
         return admin.auth().verifyIdToken(userToken)
             .then((decoded) => {
-                //list all users and return listUsersResult, you can see complete properties here https://firebase.google.com/docs/reference/admin/node/admin.auth.ListUsersResult
+                //list all users and return listUsersResult, you can see
+                //complete properties here
+                //https://firebase.google.com/docs/reference/admin/node/admin.auth.ListUsersResult
                 admin.auth().listUsers().then((listUsersResult) => {
-                    //in this part we assign the "users" property of the listUsersResult to the variable users, you can see more of users properties here https://firebase.google.com/docs/reference/admin/node/admin.auth.UserRecord
+                    //in this part we assign the "users" property of the
+                    //listUsersResult to the variable users, you can see more of
+                    //users properties here
+                    //https://firebase.google.com/docs/reference/admin/node/admin.auth.UserRecord
                     let users = listUsersResult.users;
                     let objUsers = [];
-                    //create an array of objects with information you want to return
+                    //create an array of objects with information you want to
+                    //return
                     for (let i = 0; i < users.length; i++) {
                         //here we exclude the admin user from being listed
                         if (users[i]['email'] !== 'rifadasorte2@gmail.com') {
@@ -161,10 +183,13 @@ exports.listUsers = functions.https.onRequest((req, res) => {
                         }
                     }
                     console.log(objUsers.filter(Boolean));
-                    //as i had used an "if" to exclude the admin user from the listing, the "objUser" array would return with one of its positions as null, to solve this we used the filter function
+                    //as i had used an "if" to exclude the admin user from the
+                    //listing, the "objUser" array would return with one of its
+                    //positions as null, to solve this we used the filter
+                    //function
                     res.status(200).send(objUsers.filter(Boolean));
                 });
-            })
-            .catch((err) => res.status(401).send(err)); //send a message to client web if the user token is invalid
+            }) //send a message to client web if the user token is invalid
+            .catch((err) => res.status(401).send(err));
     });
 });
