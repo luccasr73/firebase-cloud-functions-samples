@@ -1,6 +1,6 @@
 # admin-functions
 
-Create, delete and list all users on client side using admin sdk
+Create, delete and list all users on client side without back-end server
 
 ### Using firestore trigger
 
