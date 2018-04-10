@@ -181,7 +181,7 @@ exports.listUsers = functions.https.onRequest((req, res) => {
                     //return
                     for (let i = 0; i < users.length; i++) {
                         //here we exclude the admin user from being listed
-                        if (users[i]['email'] !== 'rifadasorte2@gmail.com') {
+                        if (users[i]['email'] !== 'admin@gmail.com') {
                             objUsers[i] = {
                                 displayName: users[i]['displayName'],
                                 uid: users[i]['uid'],
