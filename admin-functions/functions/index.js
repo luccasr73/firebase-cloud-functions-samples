@@ -36,10 +36,10 @@ exports.createUser = functions.firestore
                 snap.data.ref.update({
                     pass: FieldValue.delete()
                 });
-                console.log("Successfully created new user: ", userRecord);
+                console.log('Successfully created new user: ', userRecord);
             })
             .catch((error) => {
-                console.log("There was an error creating the user: ", error);
+                console.log('There was an error creating the user: ', error);
             });
     });
 //delete user by firestore trigger
@@ -55,10 +55,10 @@ exports.deleteUser = functions.firestore
                 //delete user using uid present on document
                 admin.auth().deleteUser(uid)
                     .then(() => {
-                        console.log("Deleted user successfully: ", uid);
+                        console.log('Deleted user successfully: ', uid);
                     })
                     .catch(error => {
-                        console.log("There was an error deleting the user: ", error);
+                        console.log('There was an error deleting the user: ', error);
                     });
             });
     });
@@ -84,7 +84,7 @@ exports.createUser = functions.https.onRequest((req, res) => {
                         displayName: req.body.name,
                     })
                     .then((userRecord) => {
-                        console.log("Successfully created new user:", userRecord.uid);
+                        console.log('Successfully created new user: ', userRecord.uid);
                         //send a message to client web if the user is
                         //successfully created
                         res.status(200).send({
@@ -94,7 +94,7 @@ exports.createUser = functions.https.onRequest((req, res) => {
                         });
                     })
                     .catch((error) => {
-                        console.log("Error creating new user:", error);
+                        console.log('Error creating new user: ', error);
                         //send a message to client web if occurred an error on
                         //user creation
                         res.status(400).send({
@@ -126,7 +126,7 @@ exports.deleteUser = functions.https.onRequest((req, res) => {
                         //more on http://expressjs.com/en/4x/api.html#req.body
                         admin.auth().deleteUser(uid)
                             .then(() => {
-                                console.log("Deleted user successfully");
+                                console.log('Deleted user successfully');
                                 //send a message to client web if the user is
                                 //successfully deleted
                                 res.status(200).send({
@@ -135,7 +135,7 @@ exports.deleteUser = functions.https.onRequest((req, res) => {
                                 });
                             })
                             .catch((error) => {
-                                console.log("There was an error deleting the user", error);
+                                console.log('There was an error deleting the user ', error);
                                 //send a message to client web if occurred an
                                 //error on user delete
                                 res.status(400).send({
