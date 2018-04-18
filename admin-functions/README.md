@@ -131,7 +131,7 @@ exports.deleteUser = functions.https.onRequest((req, res) => {
                         //more on http://expressjs.com/en/4x/api.html#req.body
                         admin.auth().deleteUser(uid)
                             .then(() => {
-                                console.log("Deleted user successfully");
+                                console.log('Deleted user successfully');
                                 //send a message to client web if the user is
                                 //successfully deleted
                                 res.status(200).send({
